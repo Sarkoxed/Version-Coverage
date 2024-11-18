@@ -57,7 +57,7 @@ print("_" * 100)
 print()
 rand = bool(input("Do you want some grind?[0/1] >"))
 if rand:
-    for _ in range(1000):
+    for _ in range(10000):
         res2 = greedy_search(machines, deps, rand=rand)
         if len(res2) < len(res1):
             print(f"The grind is real. Now it's {len(res2)}")
