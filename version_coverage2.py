@@ -1,9 +1,14 @@
 from version_coverage import Machine, Package
+import random
+import time
 
 #class bucket_queue:
 #    def __init__
 
-def greedy_search(machines, deps: set[str]):
+def greedy_search(machines, deps: set[str], rand: bool = False):
+    if rand:
+        random.seed(time.time())
+
     def assemble_ground_set(machines):
         S = set()
         for m in machines: 
@@ -20,7 +25,12 @@ def greedy_search(machines, deps: set[str]):
     C = set()
     
     while C != U:
-        S1 = min(S, key=lambda x: weight(x, C))  
+        key_f = lambda x: weight(x, C)
+        S1 = min(S, key=key_f)  
+        if rand:
+            kk = key_f(S1)
+            S1 = random.choice([x for x in S if key_f(x) == kk])
+
         C |= S1
         S_prime.append(S1)
     

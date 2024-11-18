@@ -1,17 +1,18 @@
 from version_coverage import Machine, Package, naive_immutable
 from version_coverage2 import greedy_search
 from generate_sequence import find_prob
-from random import randint, choice
+from random import randint, choice, seed
 from time import time
 from pprint import pprint
 
-N = 20
+N = 200
 deps = {"python", "perl", "java", "rust", "haskell", "c++", "node", "pizda"}
 
+seed(1337)
 packages = {}
 for dep in deps:
     packages[dep] = []
-    for i in range(randint(1, 10)):
+    for i in range(randint(1, 20)):
         packages[dep].append(Package(dep, i))
 
 machines = []
@@ -43,14 +44,29 @@ print()
 print(f"Optimal number of entries: {optimal_number(machines, deps)}")
 print(f"Probability of choosing at random: {prob(machines, deps)}%")
 print()
+
+
 start = time()
 res1 = greedy_search(machines, deps)
 end = time()
 print(f"Greedy: #{len(res1)}, time: {end - start}")
 pprint(res1)
 
-start = time()
-res0 = naive_immutable(machines, deps)
-end = time()
-print(f"Naive: #{len(res0)}, time: {end - start}")
-pprint(res0)
+print()
+print("_" * 100)
+print()
+rand = bool(input("Do you want some grind?[0/1] >"))
+if rand:
+    for _ in range(1000):
+        res2 = greedy_search(machines, deps, rand=rand)
+        if len(res2) < len(res1):
+            print(f"The grind is real. Now it's {len(res2)}")
+            res1 = res2
+
+pprint(res2)
+
+#start = time()
+#res0 = naive_immutable(machines, deps)
+#end = time()
+#print(f"Naive: #{len(res0)}, time: {end - start}")
+#pprint(res0)
